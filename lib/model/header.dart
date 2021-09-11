@@ -1,12 +1,15 @@
-
 import 'package:myproject/screen/noti.dart';
 import 'package:flutter/material.dart';
+
+//ไม่ได้ใช้แล้วค่าาา บีมเอา header ไปยัดรวมกับหน้า home แย้วววว
 
 class Header extends StatelessWidget {
   const Header({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    int x = 1;
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 25),
       height: 50,
@@ -28,9 +31,9 @@ class Header extends StatelessWidget {
                   return NotiScreen();
                 }));
               },
-              icon: Icon(Icons.notifications),
+              icon: (x == 5) ? Icon(Icons.notifications) : Icon(Icons.list)
+              //icon: check(),
             ),
-            
           ],
         ),
       ),

@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:ffi';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:logger/logger.dart';
 import 'package:myproject/screen/component/footer.dart';
 
 class GalleryList extends StatefulWidget {
@@ -15,7 +18,6 @@ class GalleryList extends StatefulWidget {
 
 class _GalleryListState extends State<GalleryList> {
   bool _pinned = true;
-  // List<LibraryList> patternList = <LibraryList>[];
 
   List<LibraryList> listLibrary(String responseBody) {
     final lists = jsonDecode(responseBody).cast<Map<String, dynamic>>();
@@ -25,50 +27,24 @@ class _GalleryListState extends State<GalleryList> {
   }
 
   Future<List<LibraryList>> getData(http.Client client) async {
-    var url = Uri.parse("http://108b-61-7-142-198.ngrok.io/api/patterns/");
-    final response = await client.get(url);
-    //var jsonData = json.decode(response.body);
-    return listLibrary(utf8.decode(response.bodyBytes));
+    var url =
+        "http://78bb-2405-9800-b530-4ce7-89e2-ee36-6ba4-b149.ngrok.io/api/patterns/";
+
+    final response = await Dio().get(url);
+
+    if (response.statusCode == 200 || response.statusCode == 400) {
+      Logger logger = Logger();
+      logger.e(response.data);
+    } else {
+      throw Exception('Failed to load data!');
+    }
+    return response.data;
   }
-
-  // void getPatternfromApi() async {
-  //   PatternAPI.getData().then((response) {
-  //     setState(() {
-  //       Iterable list = json.decode(response.bodyB);
-  //       patternList = list.map((model) => LibraryList.fromJson(model)).toList();
-  //       //print(patternList);
-  //       //patternList = response;
-  //     });
-  //   });
-  // }
-
-  // @override
-  // Void initState() {
-  //   super.initState();
-  //   //getPatternfromApi();
-  //   //getData();
-  // }
-
-  // Future getData() async {
-  //   var url = Uri.parse("http://1a6478d3541c.ngrok.io/api/patterns/");
-  //   final response = await http.get(url);
-
-  //   // print(response.body);
-  //   // final jsonresponse = json.decode(response.body);
-  //   // return ChangeTypeLibrary.fromJson(jsonresponse[index]);
-
-  //   final jsonresponse = utf8.decode(response.bodyBytes);
-  //   //print(jsonresponse);
-  //   if (response.statusCode == 200) {
-  //     return jsonresponse;
-  //   } else {
-  //     throw Exception("Fail to load data");
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
-    String image = "http://108b-61-7-142-198.ngrok.io";
+    String image =
+        "http://78bb-2405-9800-b530-4ce7-89e2-ee36-6ba4-b149.ngrok.io";
     return Scaffold(
       backgroundColor: Colors.blueGrey,
       appBar: AppBar(
@@ -109,68 +85,6 @@ class _GalleryListState extends State<GalleryList> {
         },
       ),
 
-      // body: Container(
-      //   child: FutureBuilder(
-      //     future: getData(),
-      //     builder: (BuildContext context, AsyncSnapshot snapshot) {
-      //       if (snapshot.data == null) {
-      //         return Container(
-      //           child: Center(
-      //             child: Text("Loading..."),
-      //           ),
-      //         );
-      //       }
-      //       return ListView.builder(
-      //           itemCount: snapshot.data.length,
-      //           itemBuilder: (BuildContext context, int index) {
-      //             return ListTile(
-      //               title: Text(snapshot.data[index].Pattern_Name),
-      //             );
-      //           });
-      //     },
-      //   ),
-      // ),
-      // body: SingleChildScrollView(
-      //   child: FutureBuilder(
-      //     future: getData(),
-      //     builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-      //       if (snapshot.connectionState == ConnectionState.done) {
-      //         //ถ้าดึงข้อมูลครบ
-      //         return new Text(
-      //           snapshot.data.Pattern_Name,
-      //           style: TextStyle(fontSize: 18),
-      //         );
-      //       } else if (snapshot.hasError) {
-      //         return new Text("Error ${snapshot.error}");
-      //       }
-      //       return LinearProgressIndicator();
-      //     },
-      //   ),
-      // ),
-
-      // body: SingleChildScrollView(
-      //   child: FutureBuilder(
-      //     future: PatternAPI.getData(),
-      //     builder: (context, snapshot) {
-      //       //var i = patternList.length;
-      //       if (snapshot.hasData) {
-      //         return Text(snapshot.data.toString() + "\n");
-      //         // for (var i = 0; i < patternList.length; i++) {
-      //         //   return ListTile(
-      //         //     title: Text(patternList.elementAt(i).patternName),
-      //         //     subtitle: Text(patternList.elementAt(i).patternDes),
-      //         //     leading: CircleAvatar(
-      //         //         //backgroundImage: NetworkImage(snapshot.data.patternImg),
-      //         //         ),
-      //         //   );
-      //         // }
-      //       } else if (snapshot.hasError) {
-      //         return Text("Error ${snapshot.error}");
-      //       }
-      //       return LinearProgressIndicator();
-      //     },
-      //   ),
-      // ),
       // body: Container(
       //   child: ListView.builder(
       //     itemCount: patternList.length,
@@ -231,39 +145,4 @@ class LibraryList {
         Pattern_img: json['Pattern_img'] as String,
         Pattern_Des: json['Pattern_Des'] as String);
   }
-
-  // LibraryList.fromJson(Map json)
-  //     : Pattern_id = json['Pattern_id'],
-  //       Pattern_Name = json['Pattern_Name'],
-  //       Klin_Group = json['Klin_Group'],
-  //       Writing_Pattern = json['Writing_Pattern'],
-  //       Type_Pattern = json['Type_Pattern'],
-  //       Pattern_img = json['Pattern_img'],
-  //       Pattern_Des = json['Pattern_Des'];
-  // Map toJson() {
-  //   return {
-  //     'Pattern_id': Pattern_id,
-  //     'Pattern_Name': Pattern_Name,
-  //     'Klin_Group': Klin_Group,
-  //     'Writing_Pattern': Writing_Pattern,
-  //     'Type_Pattern': Type_Pattern,
-  //     'Pattern_img': Pattern_img,
-  //     'Pattern_Des': Pattern_Des
-  //   };
-  // }
 }
-
-// class PhotosList {
-//   final List<LibraryList> photos;
-
-//   PhotosList({
-//     this.photos,
-//   });
-
-//   factory PhotosList.fromJson(List<dynamic> parsedJson) {
-//     List<LibraryList> photos = new List<LibraryList>();
-//     photos = parsedJson.map((i) => LibraryList.fromjson(i)).toList();
-
-//     return new PhotosList(photos: photos);
-//   }
-// }

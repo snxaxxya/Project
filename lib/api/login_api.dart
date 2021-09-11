@@ -13,7 +13,8 @@ class APIService {
   login(LoginRequestModel requestModel) async {
     logger.e(requestModel.password);
     logger.e(requestModel.username);
-    var url = "http://108b-61-7-142-198.ngrok.io/api/login/";
+    var url =
+        "http://78bb-2405-9800-b530-4ce7-89e2-ee36-6ba4-b149.ngrok.io/api/login/";
 
     final response = await Dio().post(url, data: requestModel.toJson());
 

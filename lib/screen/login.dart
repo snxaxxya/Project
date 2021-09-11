@@ -4,6 +4,7 @@ import 'package:myproject/main.dart';
 import 'package:myproject/model/login_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:myproject/provider/login-provider.dart';
 import 'package:myproject/provider/profile-provider.dart';
 import 'package:myproject/screen/register.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   LoginRequestModel loginRequestModel;
   LoginResponseModel loginResponseModel;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
@@ -132,6 +134,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                         listen: false)
                                     .saveProfile(response);
 
+                                // Provider.of<StatusProvider>(context,
+                                //         listen: false)
+                                //     .changeStatus(true);
+
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                   return MyHomePage();
@@ -139,19 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               } else {
                                 print("Invalid");
                               }
-
                               logger.e(response);
-                              // apiService.login(loginRequestModel).then((value) {
-                              //   if (value != null) {
-                              //     print(loginRequestModel.toJson());
-                              //     //print(loginResponseModel);
-                              //     //print(apiService);
-
-                              //
-                              //   } else {
-                              //     print(Error());
-                              //   }
-                              // });
                             }
                           },
                           child: Text(

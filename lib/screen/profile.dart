@@ -18,6 +18,7 @@ class _ProfileState extends State<Profile> {
   String telephone;
   String firstName;
   String lastName;
+  String statusName;
 
   @override
   void initState() {
@@ -30,6 +31,8 @@ class _ProfileState extends State<Profile> {
     telephone = Provider.of<ProfileProvider>(context, listen: false).telephone;
     firstName = Provider.of<ProfileProvider>(context, listen: false).firstName;
     lastName = Provider.of<ProfileProvider>(context, listen: false).lastName;
+    statusName =
+        Provider.of<ProfileProvider>(context, listen: false).statusName;
   }
 
   @override
@@ -43,87 +46,6 @@ class _ProfileState extends State<Profile> {
         borderRadius: BorderRadius.all(Radius.circular(29)),
       ),
     );
-    // return Scaffold(
-    //   backgroundColor: Colors.blueGrey,
-    //   appBar: AppBar(
-    //     title: Text(
-    //       "ข้อมูลส่วนตัว",
-    //       style: TextStyle(color: Colors.black),
-    //     ),
-    //     backgroundColor: Colors.white,
-    //     iconTheme: IconThemeData(color: Colors.black),
-    //   ),
-    //   body: SingleChildScrollView(
-    //       child: Column(
-    //     children: [
-    //       SizedBox(
-    //         height: 30,
-    //       ),
-    //       Container(
-    //         child: Text(
-    //           "ข้อมูลส่วนตัว",
-    //           style: TextStyle(fontSize: 25, color: Colors.white),
-    //         ),
-    //       ),
-    //       Container(
-    //         margin: EdgeInsets.all(25),
-    //         padding: EdgeInsets.all(25),
-    //         width: double.infinity,
-    //         alignment: Alignment.center,
-    //         decoration: BoxDecoration(
-    //           color: Colors.white,
-    //           borderRadius: BorderRadius.all(
-    //             Radius.circular(10),
-    //           ),
-    //           border: Border.all(color: Colors.white),
-    //           boxShadow: [
-    //             BoxShadow(
-    //               color: Colors.black12,
-    //               offset: Offset(2, 2),
-    //               spreadRadius: 2,
-    //               blurRadius: 1,
-    //             ),
-    //           ],
-    //         ),
-    //         child: Column(
-    //           mainAxisAlignment: MainAxisAlignment.start,
-    //           children: <Widget>[
-    //             Text(
-    //               "ชื่อ แมว เมี๊ยว",
-    //               style: TextStyle(fontSize: 20, color: Colors.black),
-    //             ),
-    //             Text(
-    //               "เบอร์ 191-1911-191",
-    //               style: TextStyle(fontSize: 20, color: Colors.black),
-    //             ),
-    //             Text(
-    //               "อีเมล catcat@gmail.com",
-    //               style: TextStyle(fontSize: 20, color: Colors.black),
-    //             ),
-    //           ],
-    //         ),
-    //       ),
-    //       Container(
-    //           // margin: EdgeInsets.symmetric(vertical: 10),
-    //           // width: size.width * 0.8,
-    //           child: TextButton(
-    //         style: flatButtonStyle,
-    //         onPressed: () {
-    //           Navigator.push(context, MaterialPageRoute(builder: (context) {
-    //             return LoginScreen();
-    //           }));
-    //         },
-    //         child: Text(
-    //           'Logout',
-    //           //style: TextStyle(color: Colors.white),
-    //         ),
-    //       )),
-    //     ],
-    //   )),
-    //   bottomNavigationBar: BottomBar(
-    //     selectedMenu: MenuState.profile,
-    //   ),
-    // );
 
     return Scaffold(
       backgroundColor: Colors.blueGrey,
@@ -180,6 +102,17 @@ class _ProfileState extends State<Profile> {
             ),
             Text(
               "Tel. $telephone",
+              style: TextStyle(
+                  fontSize: 15.0,
+                  color: Colors.white,
+                  letterSpacing: 2.0,
+                  fontWeight: FontWeight.w300),
+            ),
+            SizedBox(
+              height: 80,
+            ),
+            Text(
+              "Status : $statusName",
               style: TextStyle(
                   fontSize: 15.0,
                   color: Colors.white,

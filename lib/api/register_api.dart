@@ -5,7 +5,8 @@ import 'package:myproject/model/regis_model.dart';
 
 class APIRegis {
   Future<RegisResponseModel> regis(RegisRequestModel requestModel) async {
-    var url = Uri.parse("http://108b-61-7-142-198.ngrok.io/api/members/");
+    var url = Uri.parse(
+        "http://78bb-2405-9800-b530-4ce7-89e2-ee36-6ba4-b149.ngrok.io/api/members/");
 
     final response = await http.post(url, body: requestModel.toJson());
 
