@@ -106,17 +106,6 @@ class _GalleryListState extends State<GalleryList> {
   }
 }
 
-// class PatternAPI {
-//   static Future getData() async {
-//     var url = Uri.parse("http://1a6478d3541c.ngrok.io/api/patterns/");
-//     final response = await http.get(url);
-//     //print(utf8.decode(response.bodyBytes));
-
-//     return utf8.decode(response.bodyBytes);
-//     // return response;
-//   }
-// }
-
 class LibraryList {
   int Pattern_id;
   String Pattern_Name;
