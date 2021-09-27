@@ -1,12 +1,17 @@
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 import 'dart:convert';
 
 import 'package:myproject/model/regis_model.dart';
 
 class APIRegis {
+  Logger logger = Logger();
   Future<RegisResponseModel> regis(RegisRequestModel requestModel) async {
-    var url = Uri.parse(
-        "http://78bb-2405-9800-b530-4ce7-89e2-ee36-6ba4-b149.ngrok.io/api/members/");
+    logger.e(requestModel.username);
+    logger.e(requestModel.firstname);
+    logger.e(requestModel.lastname);
+    logger.e(requestModel.email);
+    var url = Uri.parse("http://9953-2403-6200-8860-30cb-f0db-8b9d-85b6-b93e.ngrok.io/api/members/");
 
     final response = await http.post(url, body: requestModel.toJson());
 

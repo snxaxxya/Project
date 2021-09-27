@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:myproject/api/register_api.dart';
 import 'package:myproject/model/regis_model.dart';
 import 'package:myproject/screen/login.dart';
@@ -11,6 +13,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  Logger logger = Logger();
   GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   RegisRequestModel regisRequestModel;
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -199,28 +202,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         SizedBox(height: 30),
                         TextButton(
                           style: flatButtonStyle,
-                          onPressed: () {
+                          onPressed: () async {
                             if (validateAndSave()) {
-                              //print(loginRequestModel.toJson());
                               setState(() {
                                 isApiCallProcess = true;
                               });
-
                               APIRegis apiService = new APIRegis();
-                              apiService.regis(regisRequestModel).then((value) {
-                                if (value != null) {
-                                  print(regisRequestModel.toJson());
-                                  setState(() {
-                                    isApiCallProcess = false;
-                                  });
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return LoginScreen();
-                                  }));
-                                } else {
-                                  print(Error());
-                                }
-                              });
+                              var response =
+                                  await apiService.regis(regisRequestModel);
+                              if (response != null) {
+                                logger.e(response);
+                                setState(() {
+                                  isApiCallProcess = false;
+                                });
+
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return LoginScreen();
+                                }));
+                              } else {
+                                print("can not register");
+                              }
+                              // var response = await apiService.regis(regisRequestModel).then((value) {
+                              //   if (response != null) {
+
+                              //     //print(regisRequestModel.toJson());
+                              //     setState(() {
+                              //       isApiCallProcess = false;
+                              //     });
+                              //     Navigator.push(context,
+                              //         MaterialPageRoute(builder: (context) {
+                              //       return LoginScreen();
+                              //     }));
+                              //   } else {
+                              //     print(Error());
+                              //   }
+
+                              // });
                             }
                           },
                           child: Text(

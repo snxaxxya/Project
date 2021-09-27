@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:myproject/provider/profile-provider.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'component/footer.dart';
 import 'noti.dart';
 
@@ -73,8 +74,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
+              SizedBox(height: 15,),
               Container(
-                child: Image.asset("assets/images/cover.jpg"),
+                constraints: BoxConstraints.expand(height: 200),
+                child: imageSlider(context),
               ),
               Container(
                 alignment: Alignment.center,
@@ -95,6 +98,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           ))
                     ])),
               ),
+              // SizedBox(height: 5,),
+              // Container(
+              //   constraints: BoxConstraints.expand(height: 200),
+              //   child: imageSlider(context),
+              // )
+              
             ],
           ),
         ),
@@ -104,4 +113,19 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
+
+Swiper imageSlider(context) {
+  return new Swiper(
+    autoplay: true,
+    itemBuilder: (BuildContext context, int index) {
+      return new Image.asset(
+        "assets/images/cover.jpg",
+        fit: BoxFit.fitHeight,
+      );
+    },
+    itemCount: 10,
+    viewportFraction: 0.8,
+    scale: 0.9,
+  );
 }

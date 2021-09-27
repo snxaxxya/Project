@@ -1,9 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
-import 'package:myproject/provider/profile-provider.dart';
-import 'package:provider/provider.dart';
-import 'dart:convert';
 import '../model/login_model.dart';
 import 'package:logger/logger.dart';
 
@@ -13,8 +8,7 @@ class APIService {
   login(LoginRequestModel requestModel) async {
     logger.e(requestModel.password);
     logger.e(requestModel.username);
-    var url =
-        "http://78bb-2405-9800-b530-4ce7-89e2-ee36-6ba4-b149.ngrok.io/api/login/";
+    var url = "http://9953-2403-6200-8860-30cb-f0db-8b9d-85b6-b93e.ngrok.io/api/login/";
 
     final response = await Dio().post(url, data: requestModel.toJson());
 

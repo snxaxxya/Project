@@ -13,6 +13,7 @@ class ProfileProvider extends ChangeNotifier {
   String telephone;
   String email;
   String dateJoined;
+  String statusID;
   String statusName;
   LoginResponseModel loginResponseModel = LoginResponseModel();
 
@@ -25,6 +26,7 @@ class ProfileProvider extends ChangeNotifier {
     this.telephone = loginResponseModel.telephone;
     this.email = loginResponseModel.email;
     this.dateJoined = loginResponseModel.dateJoined;
+    this.statusID = loginResponseModel.status.statusID;
     this.statusName = loginResponseModel.status.statusName;
   }
 }

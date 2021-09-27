@@ -4,7 +4,7 @@ import 'package:myproject/main.dart';
 import 'package:myproject/model/login_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:myproject/provider/login-provider.dart';
+// import 'package:myproject/provider/login-provider.dart';
 import 'package:myproject/provider/profile-provider.dart';
 import 'package:myproject/screen/register.dart';
 import 'package:provider/provider.dart';
@@ -133,10 +133,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Provider.of<ProfileProvider>(context,
                                         listen: false)
                                     .saveProfile(response);
-
-                                // Provider.of<StatusProvider>(context,
-                                //         listen: false)
-                                //     .changeStatus(true);
 
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {

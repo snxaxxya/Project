@@ -29,11 +29,12 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
   image_picker: ^0.8.3+3
-  tflite: ^1.1.1
+  tflite: ^1.1.2
   carousel_pro: ^1.0.0
   logger: ^1.1.0
   provider: ^6.0.0
   dio: ^4.0.0
+  flutter_swiper: ^1.1.6
 
 dev_dependencies:
   flutter_test:
@@ -55,6 +56,10 @@ flutter:
     - assets/cat_dog_labels.txt
     - assets/catdog_model.tflite
     - assets/images/
+    - assets/labels.txt
+    - assets/model_fp16.tflite
+    - assets/maker_labels.txt
+    - assets/maker_model.tflite
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

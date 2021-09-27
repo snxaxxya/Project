@@ -1,13 +1,25 @@
-import 'dart:convert';
-import 'dart:developer';
-import 'dart:ffi';
-import 'package:dio/dio.dart';
+// import 'dart:convert';
+// import 'dart:developer';
+// import 'dart:ffi';
+//import 'dart:convert';
+
+//import 'package:dio/dio.dart';
+//import 'dart:html';
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:logger/logger.dart';
+import 'package:myproject/api/library_api.dart';
+import 'package:myproject/model/library_model.dart';
+import 'package:myproject/provider/search-provider.dart';
+// import 'package:logger/logger.dart';
+// import 'package:myproject/api/library_api.dart';
+// import 'package:myproject/api/login_api.dart';
+// import 'package:myproject/model/library_model.dart';
 import 'package:myproject/screen/component/footer.dart';
+import 'package:myproject/screen/search.dart';
+import 'package:provider/provider.dart';
 
 class GalleryList extends StatefulWidget {
   const GalleryList({Key key}) : super(key: key);
@@ -17,35 +29,35 @@ class GalleryList extends StatefulWidget {
 }
 
 class _GalleryListState extends State<GalleryList> {
-  bool _pinned = true;
+  Logger logger = Logger();
+  bool isApiCallProcess = false;
+  GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
+  SearchModel searchModel;
+  LibraryList libraryList;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  List<LibraryList> a;
 
-  List<LibraryList> listLibrary(String responseBody) {
-    final lists = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-    return lists
-        .map<LibraryList>((json) => LibraryList.fromJson(json))
-        .toList();
+  @override
+  void initstate() {
+    super.initState();
+    a = LibraryAPI().getData() as List<LibraryList>;
+    //LibraryAPI().getData();
+    //searchModel = new SearchModel(name: '');
   }
 
-  Future<List<LibraryList>> getData(http.Client client) async {
-    var url =
-        "http://78bb-2405-9800-b530-4ce7-89e2-ee36-6ba4-b149.ngrok.io/api/patterns/";
-
-    final response = await Dio().get(url);
-
-    if (response.statusCode == 200 || response.statusCode == 400) {
-      Logger logger = Logger();
-      logger.e(response.data);
-    } else {
-      throw Exception('Failed to load data!');
-    }
-    return response.data;
-  }
+  ButtonStyle flatButtonStyle = TextButton.styleFrom(
+    primary: Colors.white,
+    backgroundColor: Color(0xFF795548),
+    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(29)),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
-    String image =
-        "http://78bb-2405-9800-b530-4ce7-89e2-ee36-6ba4-b149.ngrok.io";
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: Colors.blueGrey,
       appBar: AppBar(
         title: Text(
@@ -55,50 +67,61 @@ class _GalleryListState extends State<GalleryList> {
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
       ),
-
-      body: FutureBuilder<List<LibraryList>>(
-        future: getData(http.Client()),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text('An error has occurred!'),
-            );
-          } else if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(snapshot.data[index].Pattern_Name),
-                  subtitle: Text(snapshot.data[index].Pattern_Des),
-                  leading: CircleAvatar(
-                    backgroundImage:
-                        NetworkImage(image + snapshot.data[index].Pattern_img),
-                  ),
-                );
-              },
-            );
-          } else {
-            return const Center(
+      body: (LibraryAPI().getData() != null)
+          ? Container(
+              child: Column(
+                children: <Widget>[
+                  ListView.builder(
+                    itemCount: a.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(a[index].patternName),
+                        subtitle: Text(a[index].patternDes),
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(
+                              "http://9953-2403-6200-8860-30cb-f0db-8b9d-85b6-b93e.ngrok.io" +
+                                  a[index].patternImg.last.img),
+                        ),
+                      );
+                    },
+                  )
+                  // FutureBuilder<List<LibraryList>>(
+                  //   initialData: List(),
+                  //   future: LibraryAPI().getData(),
+                  //   builder: (context, snapshot) {
+                  //     print(snapshot.data);
+                  //     if (snapshot.hasError) {
+                  //       return const Center(
+                  //         child: Text('An error has occurred!'),
+                  //       );
+                  //     } else if (snapshot.hasData) {
+                  //       final List<LibraryList> contacts = snapshot.data;
+                  //       return ListView.builder(
+                  //         itemCount: snapshot.data.length,
+                  //         itemBuilder: (context, index) {
+                  //           return ListTile(
+                  //             title: Text(contacts[index].patternName),
+                  //             subtitle: Text(contacts[index].patternDes),
+                  //             // leading: CircleAvatar(
+                  //             //   backgroundImage: NetworkImage(
+                  //             //       "http://a65a-61-7-142-198.ngrok.io"+ snapshot.data[index].patternImg.last.img),
+                  //             // ),
+                  //           );
+                  //         },
+                  //       );
+                  //     } else {
+                  //       return const Center(
+                  //         child: CircularProgressIndicator(),
+                  //       );
+                  //     }
+                  //   },
+                  // ),
+                ],
+              ),
+            )
+          : Center(
               child: CircularProgressIndicator(),
-            );
-          }
-        },
-      ),
-
-      // body: Container(
-      //   child: ListView.builder(
-      //     itemCount: patternList.length,
-      //     itemBuilder: (context, index) {
-      //       return ListTile(
-      //         title: Text(patternList[index].Pattern_Name),
-      //         subtitle: Text(patternList[index].Pattern_Des),
-      //         leading: CircleAvatar(
-      //           backgroundImage: NetworkImage(patternList[index].Pattern_img),
-      //         ),
-      //       );
-      //     },
-      //   ),
-      // ),
+            ),
       bottomNavigationBar: BottomBar(
         selectedMenu: MenuState.list,
       ),
@@ -106,32 +129,32 @@ class _GalleryListState extends State<GalleryList> {
   }
 }
 
-class LibraryList {
-  int Pattern_id;
-  String Pattern_Name;
-  int Klin_Group;
-  int Writing_Pattern;
-  int Type_Pattern;
-  String Pattern_img;
-  String Pattern_Des;
+// class LibraryList {
+//   int Pattern_id;
+//   String Pattern_Name;
+//   int Klin_Group;
+//   int Writing_Pattern;
+//   int Type_Pattern;
+//   String Pattern_img;
+//   String Pattern_Des;
 
-  LibraryList(
-      {this.Pattern_id,
-      this.Pattern_Name,
-      this.Klin_Group,
-      this.Writing_Pattern,
-      this.Type_Pattern,
-      this.Pattern_img,
-      this.Pattern_Des});
+//   LibraryList(
+//       {this.Pattern_id,
+//       this.Pattern_Name,
+//       this.Klin_Group,
+//       this.Writing_Pattern,
+//       this.Type_Pattern,
+//       this.Pattern_img,
+//       this.Pattern_Des});
 
-  factory LibraryList.fromJson(Map<String, dynamic> json) {
-    return LibraryList(
-        Pattern_id: json['Pattern_id'] as int,
-        Pattern_Name: json['Pattern_Name'] as String,
-        Klin_Group: json['Klin_Group'] as int,
-        Writing_Pattern: json['Writing_Pattern'] as int,
-        Type_Pattern: json['Type_Pattern'] as int,
-        Pattern_img: json['Pattern_img'] as String,
-        Pattern_Des: json['Pattern_Des'] as String);
-  }
-}
+//   factory LibraryList.fromJson(Map<String, dynamic> json) {
+//     return LibraryList(
+//         Pattern_id: json['Pattern_id'] as int,
+//         Pattern_Name: json['Pattern_Name'] as String,
+//         Klin_Group: json['Klin_Group'] as int,
+//         Writing_Pattern: json['Writing_Pattern'] as int,
+//         Type_Pattern: json['Type_Pattern'] as int,
+//         Pattern_img: json['Pattern_img'] as String,
+//         Pattern_Des: json['Pattern_Des'] as String);
+//   }
+// }

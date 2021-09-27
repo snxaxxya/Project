@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:myproject/provider/profile-provider.dart';
+import 'package:provider/provider.dart';
 //import 'package:image_picker/image_picker.dart';
 import 'component/footer.dart';
+import 'login.dart';
 import 'noti.dart';
 
 class sendForm extends StatefulWidget {
@@ -12,12 +15,36 @@ class sendForm extends StatefulWidget {
 }
 
 class _sendFormState extends State<sendForm> {
+
+  String email;
+  String telephone;
+  String firstName;
+  String lastName;
+  String statusName;
+
+  @override
+  void initState() {
+    fetchScreen();
+    super.initState();
+  }
+
+  fetchScreen() {
+    email = Provider.of<ProfileProvider>(context, listen: false).email;
+    telephone = Provider.of<ProfileProvider>(context, listen: false).telephone;
+    firstName = Provider.of<ProfileProvider>(context, listen: false).firstName;
+    lastName = Provider.of<ProfileProvider>(context, listen: false).lastName;
+    statusName =
+        Provider.of<ProfileProvider>(context, listen: false).statusName;
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final ButtonStyle flatButtonStyle = TextButton.styleFrom(
-      primary: Colors.white,
-      backgroundColor: Color(0xFF795548),
+      primary: Colors.black,
+      backgroundColor: Colors.white,
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(29)),
@@ -33,7 +60,8 @@ class _sendFormState extends State<sendForm> {
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
       ),
-      body: SingleChildScrollView(
+      body: email != null
+      ? SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -148,6 +176,24 @@ class _sendFormState extends State<sendForm> {
             ),
           ],
         ),
+      )
+      : Container(
+        alignment: Alignment.center,
+              child: TextButton(
+                style: flatButtonStyle,
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return LoginScreen();
+                  }));
+                },
+                child: Text(
+                  'เข้าสู่ระบบ',
+                  //style: TextStyle(color: Colors.white),
+                ),
+              )
+      ),
+      bottomNavigationBar: BottomBar(
+        selectedMenu: MenuState.sendform,
       ),
     );
   }
